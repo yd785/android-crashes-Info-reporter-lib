@@ -36,7 +36,7 @@ class ReportSender {
      */
     fun sendCachedReport() {
         // Traverse the crash folder in the disk internal storage to get each file
-        val files = fileStore.getCrasheFilesList(CrashReporterMain.mAppContext)
+        val files = fileStore.getCrashFilesList(CrashReporterMain.mAppContext)
         for (file in files) {
             // get the payload report data from the crash file in the cache storage
             // Performing network requests in the background.
@@ -64,9 +64,9 @@ class ReportSender {
             urlConnection = url.openConnection() as HttpURLConnection
             urlConnection.setRequestProperty("Content-Type", "application/json")
             urlConnection.setRequestMethod("POST")
-            urlConnection.setDoOutput(true);
-            urlConnection.setDoInput(true);
-            urlConnection.setChunkedStreamingMode(0);
+            urlConnection.setDoOutput(true)
+            urlConnection.setDoInput(true)
+            urlConnection.setChunkedStreamingMode(0)
 
             val out: OutputStream = BufferedOutputStream(urlConnection.outputStream)
             val writer = BufferedWriter(
@@ -92,7 +92,7 @@ class ReportSender {
                 line?.let { Log.i(TAG, it) }
             }
         } catch (e: Exception) {
-            e.printStackTrace();
+            e.printStackTrace()
             return false
         } finally {
             urlConnection?.disconnect()

@@ -11,6 +11,7 @@ import com.androidtasks.crashesinfo_reporter.data.DeviceDataFields
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.io.Writer
+import java.util.*
 
 /**
  * Utility for collect crash data
@@ -29,6 +30,7 @@ class CollectCrashUtil {
             collectAppData(context, crashReportData)
             collectDeviceData(crashReportData)
             collectStackTraceData(crashReportData, ex)
+            collectCreatedAtTime(crashReportData)
         }
 
         /**
@@ -36,7 +38,7 @@ class CollectCrashUtil {
          * the collections fields which will be include in the report are:
          * app package name, app version name, app version code
          *
-         * @param the context of the application
+         * @param ctx the context of the application
          * @param reportContent the report data of the exception
          */
         fun collectAppData(ctx: Context, reportContent: CrashReportContent) {
@@ -83,12 +85,16 @@ class CollectCrashUtil {
         fun collectStackTraceData(reportContent: CrashReportContent, ex: Throwable) {
             val writer: Writer = StringWriter()
             val printWriter = PrintWriter(writer)
-            ex.printStackTrace(printWriter);
+            ex.printStackTrace(printWriter)
             val crashTraceResult: String = writer.toString()
 
             reportContent.put(CrashReportFieldType.StackTraceData.toString(), crashTraceResult)
             printWriter.close()
 
+        }
+
+        fun collectCreatedAtTime(reportContent: CrashReportContent) {
+            reportContent.put(CrashReportFieldType.CreatedAt.toString(), Date().formatLogTime())
         }
     }
 }
