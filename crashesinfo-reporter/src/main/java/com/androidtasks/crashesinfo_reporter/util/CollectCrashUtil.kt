@@ -8,6 +8,8 @@ import com.androidtasks.crashesinfo_reporter.data.AppDataFields
 import com.androidtasks.crashesinfo_reporter.data.CrashReportContent
 import com.androidtasks.crashesinfo_reporter.data.CrashReportFieldType
 import com.androidtasks.crashesinfo_reporter.data.DeviceDataFields
+import com.google.gson.Gson
+import org.json.JSONObject
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.io.Writer
@@ -56,10 +58,12 @@ class CollectCrashUtil {
                 }
 
                 // assign the collect app data in the report content
+
                 val appData = AppDataFields(ctx.packageName, versionName, versionCode)
-                reportContent.put(CrashReportFieldType.AppData.toString(), appData)
+                reportContent.put(CrashReportFieldType.AppData.type, JSONObject(Gson().toJson(appData)))
             }
         }
+
 
         /**
          * collect crash device data and assign it in the report content
@@ -73,7 +77,7 @@ class CollectCrashUtil {
             val verIncreamental = Build.VERSION.INCREMENTAL
             val verSDKNum = Build.VERSION.SDK_INT
             val deviceData = DeviceDataFields(verRelease, verIncreamental, verSDKNum)
-            reportContent.put(CrashReportFieldType.DeviceData.toString(), deviceData)
+            reportContent.put(CrashReportFieldType.DeviceData.type, JSONObject(Gson().toJson(deviceData)))
         }
 
         /**
@@ -88,13 +92,13 @@ class CollectCrashUtil {
             ex.printStackTrace(printWriter)
             val crashTraceResult: String = writer.toString()
 
-            reportContent.put(CrashReportFieldType.StackTraceData.toString(), crashTraceResult)
+            reportContent.put(CrashReportFieldType.StackTraceData.type, crashTraceResult)
             printWriter.close()
 
         }
 
         fun collectCreatedAtTime(reportContent: CrashReportContent) {
-            reportContent.put(CrashReportFieldType.CreatedAt.toString(), Date().formatLogTime())
+            reportContent.put(CrashReportFieldType.CreatedAt.type, Date().formatLogTime())
         }
     }
 }

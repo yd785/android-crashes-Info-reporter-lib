@@ -39,4 +39,10 @@ class CrashReportContent {
         }
     }
 
+
+
+    fun toMap(): Map<String, Any?> {
+        return mCrashData.keys().asSequence().map { it to get(it) }.toMap()
+    }
+
 }

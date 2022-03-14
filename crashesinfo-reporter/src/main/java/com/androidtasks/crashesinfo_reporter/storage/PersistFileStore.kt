@@ -1,15 +1,20 @@
 package com.androidtasks.crashesinfo_reporter.storage
 
 import android.content.Context
+import android.util.Log
 import com.androidtasks.crashesinfo_reporter.data.CrashReportContent
 import com.androidtasks.crashesinfo_reporter.util.CRASH_DIR
 import com.androidtasks.crashesinfo_reporter.util.CRASH_FILE_EXTENSION
 import com.androidtasks.crashesinfo_reporter.util.CRASH_FILE_NAME
 import com.androidtasks.crashesinfo_reporter.util.formatLogTime
 import java.io.*
-import java.text.SimpleDateFormat
 import java.util.*
 
+private const val TAG = "PersistFileStore"
+
+/**
+ * Handles persistence of [CrashReportContent]
+ */
 class PersistFileStore {
 
     /**
@@ -29,6 +34,7 @@ class PersistFileStore {
     fun store(crashReportContent: CrashReportContent, ctx: Context) {
         //val timestamp = System.currentTimeMillis()
 
+        Log.d(TAG, "store: crashReportContent " + crashReportContent.getCrashContentStringFormat())
         // get the format time for the saved file name
         val timeFormat = Date().formatLogTime()
 
@@ -44,7 +50,7 @@ class PersistFileStore {
             val file = File(dir, fileName)
             val fileWriter = FileWriter(file)
             val bufferedWriter = BufferedWriter(fileWriter)
-            val crashContentString = crashReportContent.toString()
+            val crashContentString = crashReportContent.getCrashContentStringFormat()
             bufferedWriter.write(crashContentString)
             bufferedWriter.flush()
             bufferedWriter.close()
@@ -57,23 +63,37 @@ class PersistFileStore {
      * load the crash report data from file in the storage as JSON string
      */
     fun load(file: File): String {
-        val resultString = StringBuilder()
+        Log.d(TAG, "load: file " + file)
+        val crashDataString = StringBuilder()
+
         try {
             val fileReader = FileReader(file)
             val bufferedReader = BufferedReader(fileReader)
-            var line: String = bufferedReader.readLine()
-            while (line != null) {
-                resultString.append(line).append("\n")
-                line = bufferedReader.readLine()
-            }
+            //var line: String = bufferedReader.readLine()
+            var line: String
+            crashDataString.append(bufferedReader.readLine())
+//            while (bufferedReader.readLine().also { line = it } != null) {
+//                crashDataString.append(line)
+//                crashDataString.append('\n')
+//            }
+//            while (line != null) {
+//                resultString.append(line).append("\n")
+//                line = bufferedReader.readLine()
+//            }
             bufferedReader.close()
         } catch (ex: Exception) {
             ex.printStackTrace()
+
         }
 
-        return resultString.toString()
+        return crashDataString.toString()
     }
 
+    /**
+     * delete file from storage
+     *
+     * @param file the file to delete
+     */
     fun deleteCrashFile(file: File): Boolean {
         return file.delete()
     }

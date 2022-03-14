@@ -78,7 +78,7 @@ class ReportSender {
             writer.flush()
 
             val code = urlConnection.getResponseCode()
-            if (code != 201 || code != 200) {
+            if (code != 200) {
                 throw IOException("Invalid response from server: $code")
             }
 

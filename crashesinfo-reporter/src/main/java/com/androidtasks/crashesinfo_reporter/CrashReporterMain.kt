@@ -1,9 +1,13 @@
 package com.androidtasks.crashesinfo_reporter
 
 import android.content.Context
+import android.util.Log
 import com.androidtasks.crashesinfo_reporter.handler.ExceptionHandler
+import com.androidtasks.crashesinfo_reporter.sender.ReportSender
 import com.androidtasks.crashesinfo_reporter.util.CollectCrashUtil
 import kotlin.concurrent.thread
+
+private const val TAG = "CrashReporterMain"
 
 /**
  * Crash Report main start point for initializing handling
@@ -16,6 +20,7 @@ object CrashReporterMain {
 
     @JvmStatic
     fun initialize(context: Context) {
+        Log.d(TAG, "initialize: ")
         this._mAppContext = context
         setUpExceptionHandler()
     }
@@ -26,7 +31,7 @@ object CrashReporterMain {
     val mAppContext: Context
         get() = _mAppContext
 
-    fun setUpExceptionHandler() {
+    private fun setUpExceptionHandler() {
         if(!(Thread.getDefaultUncaughtExceptionHandler() is ExceptionHandler)) {
             Thread.setDefaultUncaughtExceptionHandler(exceptionHandler)
         }
@@ -37,6 +42,10 @@ object CrashReporterMain {
      */
     fun catchExceptionInfo(exception: Exception) {
         exceptionHandler.handleCaughtException(exception)
+    }
+
+    fun testSendCrashesReport() {
+        ReportSender().sendCachedReport()
     }
 
 

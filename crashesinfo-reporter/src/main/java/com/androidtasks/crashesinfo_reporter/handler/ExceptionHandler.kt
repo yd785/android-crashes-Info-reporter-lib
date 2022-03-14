@@ -1,6 +1,7 @@
 package com.androidtasks.crashesinfo_reporter.handler
 
 import android.content.Context
+import android.util.Log
 import com.androidtasks.crashesinfo_reporter.CrashReporterMain.mAppContext
 import com.androidtasks.crashesinfo_reporter.CrashReporterMain
 import com.androidtasks.crashesinfo_reporter.data.CrashReportContent
@@ -33,12 +34,18 @@ class ExceptionHandler : Thread.UncaughtExceptionHandler {
     private val fileStore: PersistFileStore = PersistFileStore()
 
     override fun uncaughtException(thread: Thread, ex: Throwable) {
-        if (!handleException(ex) && mDefaultExHandler != null) {
-            // if the user does not handle any exception Let the default exception handler of the system handle
-            mDefaultExHandler.uncaughtException(thread, ex)
-        } else {
-            handleException(ex)
-        }
+        Log.d(TAG, "uncaughtException: ex: " + ex.message)
+//        if (!handleException(ex) && mDefaultExHandler != null) {
+//            // if the user does not handle any exception Let the default exception handler of the system handle
+//
+//            Log.d(TAG, "uncaughtException: default")
+//            mDefaultExHandler.uncaughtException(thread, ex)
+//        } else {
+//            handleException(ex)
+//        }
+
+        handleException(ex)
+        mDefaultExHandler.uncaughtException(thread, ex)
     }
 
     /**
