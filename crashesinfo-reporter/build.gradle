@@ -46,18 +46,18 @@ dependencies {
 
     implementation 'com.github.jitpack:android-example:1.0.1'
 
-    afterEvaluate {
-        publishing {
-            publications {
-                release(MavenPublication) {
-                    from components.release
+}
 
-                    groupId = 'com.github.yd785'
-                    artifactId = 'android-crashes-Info-reporter-lib'
-                    version = '1.0'
-                }
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.github.yd785'
+                artifactId = 'android-crashes-Info-reporter-lib'
+                version = '1.0'
             }
         }
     }
-
 }
