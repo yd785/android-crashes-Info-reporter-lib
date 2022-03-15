@@ -21,7 +21,7 @@ class ReportSender {
     /**
      * Use thread pool for long running process communicate with local cache persistence and remote server
      */
-    val threadPool = Executors.newFixedThreadPool(4)
+    //val threadPool = Executors.newFixedThreadPool(4)
 
     /**
      * The persistent storage contain the report file data
@@ -34,18 +34,34 @@ class ReportSender {
      * RxJava or Kotlin Coroutines in order to prevent the needs of dependencies from host apps and also
      * due to its dependency libraries size and the fact that we only need to perform HTTP calls to 1-2 different endpoints
      */
-    fun sendCachedReport() {
+//    fun sendCachedReport() {
+//        // Traverse the crash folder in the disk internal storage to get each file
+//        val files = fileStore.getCrashFilesList(CrashReporterMain.mAppContext)
+//        for (file in files) {
+//            // get the payload report data from the crash file in the cache storage
+//            // Performing network requests in the background.
+//            threadPool.submit {
+//                val reportData = fileStore.load(file)
+//                val success = sendRequestReportToServer(reportData)
+//                if (success) {
+//                    fileStore.deleteCrashFile(file)
+//                }
+//            }
+//        }
+//    }
+
+    fun sendReport() {
+        Log.d(TAG, "sendReport: ")
         // Traverse the crash folder in the disk internal storage to get each file
         val files = fileStore.getCrashFilesList(CrashReporterMain.mAppContext)
         for (file in files) {
+            Log.d(TAG, "sendReport: send report file " + file)
             // get the payload report data from the crash file in the cache storage
             // Performing network requests in the background.
-            threadPool.submit {
-                val reportData = fileStore.load(file)
-                val success = sendRequestReportToServer(reportData)
-                if (success) {
-                    fileStore.deleteCrashFile(file)
-                }
+            val reportData = fileStore.load(file)
+            val success = sendRequestReportToServer(reportData)
+            if (success) {
+                fileStore.deleteCrashFile(file)
             }
         }
     }
@@ -60,7 +76,7 @@ class ReportSender {
         var urlConnection: HttpURLConnection? = null
 
         try {
-            val url = URL(reportUrl);
+            val url = URL(reportUrl)
             urlConnection = url.openConnection() as HttpURLConnection
             urlConnection.setRequestProperty("Content-Type", "application/json")
             urlConnection.setRequestMethod("POST")

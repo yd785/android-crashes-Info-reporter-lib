@@ -2,7 +2,9 @@ package com.androidtasks.crashesinfo_reporter
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.androidtasks.crashesinfo_reporter.handler.ExceptionHandler
+import com.androidtasks.crashesinfo_reporter.scheduler.ReportScheduler
 import com.androidtasks.crashesinfo_reporter.sender.ReportSender
 import com.androidtasks.crashesinfo_reporter.util.CollectCrashUtil
 import kotlin.concurrent.thread
@@ -23,6 +25,10 @@ object CrashReporterMain {
         Log.d(TAG, "initialize: ")
         this._mAppContext = context
         setUpExceptionHandler()
+
+        ProcessLifecycleOwner.get()
+            .lifecycle
+            .addObserver(AppObserver(ReportScheduler()))
     }
 
     /**
@@ -44,9 +50,9 @@ object CrashReporterMain {
         exceptionHandler.handleCaughtException(exception)
     }
 
-    fun testSendCrashesReport() {
-        ReportSender().sendCachedReport()
-    }
+//    fun testSendCrashesReport() {
+//        ReportSender().sendCachedReport()
+//    }
 
 
 }

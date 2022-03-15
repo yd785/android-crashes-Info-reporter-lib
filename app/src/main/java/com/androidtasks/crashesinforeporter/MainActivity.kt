@@ -32,9 +32,9 @@ class MainActivity : AppCompatActivity() {
         })
 
         // test send report of crashes
-        binding.sendReportBtn.setOnClickListener(View.OnClickListener {
-            CrashReporterMain.testSendCrashesReport()
-        })
+//        binding.sendReportBtn.setOnClickListener(View.OnClickListener {
+//            CrashReporterMain.testSendCrashesReport()
+//        })
     }
 
 
