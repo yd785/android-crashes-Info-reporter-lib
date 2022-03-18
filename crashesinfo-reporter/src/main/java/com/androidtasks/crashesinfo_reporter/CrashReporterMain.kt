@@ -5,9 +5,6 @@ import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.androidtasks.crashesinfo_reporter.handler.ExceptionHandler
 import com.androidtasks.crashesinfo_reporter.scheduler.ReportScheduler
-import com.androidtasks.crashesinfo_reporter.sender.ReportSender
-import com.androidtasks.crashesinfo_reporter.util.CollectCrashUtil
-import kotlin.concurrent.thread
 
 private const val TAG = "CrashReporterMain"
 
@@ -38,7 +35,7 @@ object CrashReporterMain {
         get() = _mAppContext
 
     private fun setUpExceptionHandler() {
-        if(!(Thread.getDefaultUncaughtExceptionHandler() is ExceptionHandler)) {
+        if (!(Thread.getDefaultUncaughtExceptionHandler() is ExceptionHandler)) {
             Thread.setDefaultUncaughtExceptionHandler(exceptionHandler)
         }
     }
@@ -49,10 +46,5 @@ object CrashReporterMain {
     fun catchExceptionInfo(exception: Exception) {
         exceptionHandler.handleCaughtException(exception)
     }
-
-//    fun testSendCrashesReport() {
-//        ReportSender().sendCachedReport()
-//    }
-
 
 }

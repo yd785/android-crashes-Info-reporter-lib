@@ -7,10 +7,16 @@ import java.util.concurrent.TimeUnit
 
 private const val TAG = "ReportScheduler"
 
-class ReportScheduler: SenderScheduler {
+/**
+ * Scheduler periodically background task to report about the crashes to End point server
+ */
+class ReportScheduler : SenderScheduler {
 
     var mThreadPoolExecuter: ScheduledThreadPoolExecutor? = null
 
+    /**
+     * start schedule send report of crashes job
+     */
     override fun startScheduleSend() {
         Log.d(TAG, "startScheduleSend: ")
         mThreadPoolExecuter.let { mThreadPoolExecuter = ScheduledThreadPoolExecutor(1) }
@@ -21,13 +27,13 @@ class ReportScheduler: SenderScheduler {
             1,
             TimeUnit.MINUTES
         )
-
-
     }
 
+    /**
+     * stop schedule sending report job
+     */
     override fun stopScheduleSend() {
         Log.d(TAG, "stopScheduleSend: ")
         mThreadPoolExecuter?.shutdown()
     }
-
 }

@@ -31,7 +31,7 @@ class CrashReportContent {
     fun getCrashContentStringFormat() = mCrashData.toString()
 
     @Synchronized
-    fun<T> put(key: String, value: T) {
+    fun <T> put(key: String, value: T) {
         try {
             mCrashData.put(key, value)
         } catch (e: JSONException) {
@@ -39,10 +39,7 @@ class CrashReportContent {
         }
     }
 
-
-
     fun toMap(): Map<String, Any?> {
         return mCrashData.keys().asSequence().map { it to get(it) }.toMap()
     }
-
 }

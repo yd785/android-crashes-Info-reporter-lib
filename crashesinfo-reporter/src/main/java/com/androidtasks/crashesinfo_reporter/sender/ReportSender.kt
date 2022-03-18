@@ -7,7 +7,6 @@ import com.androidtasks.crashesinfo_reporter.util.END_POINT_BASE_URL
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.concurrent.Executors
 
 private const val TAG = "ReportSender"
 
@@ -17,11 +16,6 @@ private const val TAG = "ReportSender"
  * transfer them to server
  */
 class ReportSender {
-
-    /**
-     * Use thread pool for long running process communicate with local cache persistence and remote server
-     */
-    //val threadPool = Executors.newFixedThreadPool(4)
 
     /**
      * The persistent storage contain the report file data
@@ -34,22 +28,6 @@ class ReportSender {
      * RxJava or Kotlin Coroutines in order to prevent the needs of dependencies from host apps and also
      * due to its dependency libraries size and the fact that we only need to perform HTTP calls to 1-2 different endpoints
      */
-//    fun sendCachedReport() {
-//        // Traverse the crash folder in the disk internal storage to get each file
-//        val files = fileStore.getCrashFilesList(CrashReporterMain.mAppContext)
-//        for (file in files) {
-//            // get the payload report data from the crash file in the cache storage
-//            // Performing network requests in the background.
-//            threadPool.submit {
-//                val reportData = fileStore.load(file)
-//                val success = sendRequestReportToServer(reportData)
-//                if (success) {
-//                    fileStore.deleteCrashFile(file)
-//                }
-//            }
-//        }
-//    }
-
     fun sendReport() {
         Log.d(TAG, "sendReport: ")
         // Traverse the crash folder in the disk internal storage to get each file

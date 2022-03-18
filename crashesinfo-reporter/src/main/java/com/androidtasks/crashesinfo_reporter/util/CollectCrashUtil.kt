@@ -49,21 +49,23 @@ class CollectCrashUtil {
             // Get package information for extract the application version name and code
             val pInfo: PackageInfo =
                 pm.getPackageInfo(ctx.getPackageName(), PackageManager.GET_ACTIVITIES)
-            if (pInfo != null) {
-                val versionName = if (pInfo.versionName == null) "null" else pInfo.versionName
+
+            with(pInfo) {
+                val versionName = if (versionName == null) "null" else versionName
                 val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    pInfo.longVersionCode.toString() + ""
+                    longVersionCode.toString() + ""
                 } else {
-                    pInfo.versionCode.toString()
+                    versionCode.toString()
                 }
 
                 // assign the collect app data in the report content
-
                 val appData = AppDataFields(ctx.packageName, versionName, versionCode)
-                reportContent.put(CrashReportFieldType.AppData.type, JSONObject(Gson().toJson(appData)))
+                reportContent.put(
+                    CrashReportFieldType.AppData.type,
+                    JSONObject(Gson().toJson(appData))
+                )
             }
         }
-
 
         /**
          * collect crash device data and assign it in the report content
@@ -73,11 +75,14 @@ class CollectCrashUtil {
          * @param reportContent the report data of the exception
          */
         fun collectDeviceData(reportContent: CrashReportContent) {
-            val verRelease =  Build.VERSION.RELEASE
+            val verRelease = Build.VERSION.RELEASE
             val verIncreamental = Build.VERSION.INCREMENTAL
             val verSDKNum = Build.VERSION.SDK_INT
             val deviceData = DeviceDataFields(verRelease, verIncreamental, verSDKNum)
-            reportContent.put(CrashReportFieldType.DeviceData.type, JSONObject(Gson().toJson(deviceData)))
+            reportContent.put(
+                CrashReportFieldType.DeviceData.type,
+                JSONObject(Gson().toJson(deviceData))
+            )
         }
 
         /**
@@ -97,6 +102,11 @@ class CollectCrashUtil {
 
         }
 
+        /**
+         * collect The time
+         *
+         * @param reportContent the report data of the exception
+         */
         fun collectCreatedAtTime(reportContent: CrashReportContent) {
             reportContent.put(CrashReportFieldType.CreatedAt.type, Date().formatLogTime())
         }

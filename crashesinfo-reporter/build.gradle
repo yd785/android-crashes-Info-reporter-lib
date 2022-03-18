@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'maven-publish'
 }
 
 android {
@@ -44,20 +43,5 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.9.0'
 
-    implementation 'com.github.jitpack:android-example:1.0.1'
-
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-
-                groupId = 'com.github.yd785'
-                artifactId = 'android-crashes-Info-reporter-lib'
-                version = '1.0'
-            }
-        }
-    }
-}

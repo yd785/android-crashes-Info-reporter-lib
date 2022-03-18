@@ -1,17 +1,10 @@
 package com.androidtasks.crashesinfo_reporter.handler
 
-import android.content.Context
-import android.util.Log
 import com.androidtasks.crashesinfo_reporter.CrashReporterMain.mAppContext
-import com.androidtasks.crashesinfo_reporter.CrashReporterMain
 import com.androidtasks.crashesinfo_reporter.data.CrashReportContent
 import com.androidtasks.crashesinfo_reporter.storage.PersistFileStore
-import com.androidtasks.crashesinfo_reporter.util.CollectCrashUtil
 import com.androidtasks.crashesinfo_reporter.util.CollectCrashUtil.Companion.collectCrashInfo
 import kotlin.concurrent.thread
-
-// log TAG for class
-private const val TAG = "ExceptionHandler"
 
 /**
  * Handle the exceptions - captures the stacktrace for every unhandled error, and generates a diagnostic report data
@@ -34,18 +27,8 @@ class ExceptionHandler : Thread.UncaughtExceptionHandler {
     private val fileStore: PersistFileStore = PersistFileStore()
 
     override fun uncaughtException(thread: Thread, ex: Throwable) {
-        Log.d(TAG, "uncaughtException: ex: " + ex.message)
-//        if (!handleException(ex) && mDefaultExHandler != null) {
-//            // if the user does not handle any exception Let the default exception handler of the system handle
-//
-//            Log.d(TAG, "uncaughtException: default")
-//            mDefaultExHandler.uncaughtException(thread, ex)
-//        } else {
-//            handleException(ex)
-//        }
-
         handleException(ex)
-        mDefaultExHandler.uncaughtException(thread, ex)
+        mDefaultExHandler?.uncaughtException(thread, ex)
     }
 
     /**
@@ -64,10 +47,9 @@ class ExceptionHandler : Thread.UncaughtExceptionHandler {
         return true
     }
 
-    public fun handleCaughtException(ex: Exception) {
+    fun handleCaughtException(ex: Exception) {
         thread(start = true) {
             handleException(ex)
         }
     }
-
 }

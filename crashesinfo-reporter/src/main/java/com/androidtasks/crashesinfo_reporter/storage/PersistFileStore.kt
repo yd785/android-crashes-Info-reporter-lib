@@ -24,7 +24,7 @@ class PersistFileStore {
      * @return Array<File> array of Files
      */
     fun getCrashFilesList(ctx: Context): Array<File> {
-        val dir = File(ctx.getFilesDir(), CRASH_DIR)
+        val dir = File(ctx.filesDir, CRASH_DIR)
         return dir.listFiles()
     }
 
@@ -69,17 +69,7 @@ class PersistFileStore {
         try {
             val fileReader = FileReader(file)
             val bufferedReader = BufferedReader(fileReader)
-            //var line: String = bufferedReader.readLine()
-            var line: String
             crashDataString.append(bufferedReader.readLine())
-//            while (bufferedReader.readLine().also { line = it } != null) {
-//                crashDataString.append(line)
-//                crashDataString.append('\n')
-//            }
-//            while (line != null) {
-//                resultString.append(line).append("\n")
-//                line = bufferedReader.readLine()
-//            }
             bufferedReader.close()
         } catch (ex: Exception) {
             ex.printStackTrace()

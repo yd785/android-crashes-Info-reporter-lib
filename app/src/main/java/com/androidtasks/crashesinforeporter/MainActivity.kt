@@ -16,26 +16,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         // event of caught null pointer exception test
-        binding.caughtExceptionBtn.setOnClickListener(View.OnClickListener {
+        binding.caughtExceptionBtn.setOnClickListener {
             try {
                 val list: MutableList<String>? = null
                 list!!.add("new element")
             } catch (ex: Exception) {
                 CrashReporterMain.catchExceptionInfo(ex)
             }
-        })
+        }
 
         // event of uncaught null pointer exception test
-        binding.uncaghtExceptionBtn.setOnClickListener(View.OnClickListener {
+        binding.uncaghtExceptionBtn.setOnClickListener {
             val list: MutableList<String>? = null
             list!!.add("new element")
-        })
-
-        // test send report of crashes
-//        binding.sendReportBtn.setOnClickListener(View.OnClickListener {
-//            CrashReporterMain.testSendCrashesReport()
-//        })
+        }
     }
-
-
 }
